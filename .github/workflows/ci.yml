@@ -61,6 +61,7 @@ jobs:
     name: 'Deploy Azure Web App'
     needs: build_test_publish
     runs-on: ubuntu-latest
+    environment: Production
     steps:
      - name: Download Build Artifact
        uses: actions/download-artifact@v2
