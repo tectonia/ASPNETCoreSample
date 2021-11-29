@@ -37,6 +37,16 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
+    - name: Create an Issue if build fails
+      if: ${{ failure() }}
+      uses: nashmaniac/create-issue-action@v1.1
+      with:
+        title: Build Failed
+        token: ${{secrets.GITHUB_TOKEN}}
+        assignees: ${{github.actor}}
+        labels: workflow-failed
+        body: Workflow failed for commit ${{github.sha}}
+      
     - name: Publish
       run:   dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
     
