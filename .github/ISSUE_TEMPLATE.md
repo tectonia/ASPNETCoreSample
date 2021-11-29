@@ -1,5 +1,5 @@
 ---
 title: Build failed
-assignees: @Me
+assignees: puneet-minhas
 labels: build-failed
 ---
