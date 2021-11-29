@@ -1,14 +1,14 @@
 name: MS Teams Notifications
-on:
- issues:
-    types: [opened, deleted, closed]
+on: 
+ issues: [opened, deleted, closed]
+
  
- jobs:
-  build:
+jobs: 
+   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+     
       # this is the new step using the ms-teams-notification action
       - name: Notify dedicated teams channel
         uses: jdcargile/ms-teams-notification@v1.3
