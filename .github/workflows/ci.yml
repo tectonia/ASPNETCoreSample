@@ -6,13 +6,13 @@ on:
   pull_request:
     branches: [ main ]
 env:
-  AZURE_WEBAPP_NAME: your-app-name    # set this to your application's name
+  AZURE_WEBAPP_NAME: aspdotnetcorewelcome    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.x'           # set this to the dot net version to use
 
 jobs:
-  build_test:
-    name: 'CI - Build and test'
+  build_test_publish:
+    name: 'Build test publish'
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
@@ -38,3 +38,18 @@ jobs:
 
     - name: Publish
       run:   dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+
+  deploy-to-azure:
+    name: 'Deploy Azure Web App'
+    needs: build_test_publish
+    runs-on: ubuntu-latest
+    steps:
+     - name: 'Deploy Azure Web App'
+       uses: azure/webapps-deploy@v2
+       with:
+         app-name: ${{ env.AZURE_WEBAPP_NAME }} 
+         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings 
+         package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+      
+  
+  
