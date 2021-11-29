@@ -24,6 +24,10 @@ jobs:
     #    os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
+    -  run: |
+        echo ${{ github.event_name }}
+        echo ${{ github.event.pull_request.base.ref }}
+        
     -  name: Checkout repo code
        uses: actions/checkout@v2
       
@@ -61,16 +65,13 @@ jobs:
         path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
 
   deploy-to-azure:
-    # if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
     name: 'Deploy Azure Web App'
     needs: build_test_publish
     runs-on: ubuntu-latest
     environment: Production
     steps:
-     - run: |
-        echo ${{ github.event_name }}
-        echo ${{ github.event.action }}
-        echo ${{ github.event.pull_request.merge }}
+
      - name: Download Build Artifact
        uses: actions/download-artifact@v2
        id: appartifact
