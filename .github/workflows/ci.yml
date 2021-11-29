@@ -1,25 +1,81 @@
-name: .NET
+name: Deploy ASP.NET Core app to Azure Web App
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+env:
+  AZURE_WEBAPP_NAME: aspdotnetcorewelcome    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '6.0.x'           # set this to the dot net version to use
 
 jobs:
-  build:
-
+  build_test_publish:
+    name: 'Build, Test and Publish'
     runs-on: ubuntu-latest
+  #  runs-on: ${{matrix.os}}
+  #  strategy:
+    #  matrix:
+    #    os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
-    - uses: actions/checkout@v2
+    -  name: Checkout repo code
+       uses: actions/checkout@v2
+      
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
     - name: Restore dependencies
       run: dotnet restore
+      
     - name: Build
       run: dotnet build --no-restore
+      
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+    - name: Create an Issue if build fails
+      if: ${{ failure() }}
+      uses: nashmaniac/create-issue-action@v1.1
+      with:
+        title: Build Failed
+        token: ${{secrets.GITHUB_TOKEN}}
+        assignees: ${{github.actor}}
+        labels: build-failed
+        body: Build failed for commit ${{github.sha}}
+      
+    - name: Publish
+      run:   dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+    
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: myappartifact
+        path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+
+  deploy-to-azure:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    name: 'Deploy Azure Web App'
+    needs: build_test_publish
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+     - name: Download Build Artifact
+       uses: actions/download-artifact@v2
+       id: appartifact
+       with:
+        name: myappartifact
+        path: myappartifact
+   
+     - name: 'Deploy Azure Web App'
+       uses: azure/webapps-deploy@v2
+       with:
+         app-name: ${{ env.AZURE_WEBAPP_NAME }} 
+         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings 
+         package: ${{steps.appartifact.outputs.download-path}}
+      
+  
+  
