@@ -44,8 +44,8 @@ jobs:
         title: Build Failed
         token: ${{secrets.GITHUB_TOKEN}}
         assignees: ${{github.actor}}
-        labels: workflow-failed
-        body: Workflow failed for commit ${{github.sha}}
+        labels: build-failed
+        body: Build failed for commit ${{github.sha}}
       
     - name: Publish
       run:   dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
