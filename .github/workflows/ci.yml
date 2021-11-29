@@ -25,6 +25,7 @@ jobs:
 
     steps:
     -  run: |
+        echo ${{ github.ref }}
         echo ${{ github.event_name }}
         echo ${{ github.event.action }}
         echo ${{ github.event.pull_request.base.ref }}
@@ -48,13 +49,7 @@ jobs:
 
     - name: Create an Issue if build fails
       if: ${{ failure() }}
-      uses: nashmaniac/create-issue-action@v1.1
-      with:
-        title: Build Failed
-        token: ${{secrets.GITHUB_TOKEN}}
-        assignees: ${{github.actor}}
-        labels: build-failed
-        body: Build failed for commit ${{github.sha}}
+      run: echo build failed
       
     - name: Publish
       run:   dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
@@ -66,7 +61,7 @@ jobs:
         path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
 
   deploy-to-azure:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: github.event_name == 'push'
     name: 'Deploy Azure Web App'
     needs: build_test_publish
     runs-on: ubuntu-latest
