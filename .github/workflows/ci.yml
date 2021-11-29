@@ -51,18 +51,19 @@ jobs:
     needs: build_test_publish
     runs-on: ubuntu-latest
     steps:
-     - name: downloadtest
+     - name: Download Build Artifact
        uses: actions/download-artifact@v2
+       id: appartifact
        with:
-        name: mywebapp1
-        path: mywebapp1
+        name: aspdotnetcoreappartifact
+        path: aspdotnetcoreappartifact
    
      - name: 'Deploy Azure Web App'
        uses: azure/webapps-deploy@v2
        with:
          app-name: ${{ env.AZURE_WEBAPP_NAME }} 
          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings 
-         package: ${{steps.downloadtest.outputs.download-path}}
+         package: ${{steps.appartifact.outputs.download-path}}
       
   
   
