@@ -27,5 +27,13 @@ namespace ASPNETCoreSample.UnitTests
 
             Assert.IsTrue(result);
         }
+        
+        [TestMethod]
+        public void HomeController_Test4()
+        {
+            bool result = true;
+
+            Assert.IsTrue(result);
+        }
     }
 }
