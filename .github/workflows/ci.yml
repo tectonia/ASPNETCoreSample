@@ -43,7 +43,7 @@ jobs:
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: mywebapp1
+        name: myappartifact
         path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
 
   deploy-to-azure:
@@ -55,8 +55,8 @@ jobs:
        uses: actions/download-artifact@v2
        id: appartifact
        with:
-        name: aspdotnetcoreappartifact
-        path: aspdotnetcoreappartifact
+        name: myappartifact
+        path: myappartifact
    
      - name: 'Deploy Azure Web App'
        uses: azure/webapps-deploy@v2
