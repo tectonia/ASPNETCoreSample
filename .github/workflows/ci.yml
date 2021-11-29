@@ -13,10 +13,11 @@ env:
 jobs:
   build_test_publish:
     name: 'Build test publish'
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
+  #  runs-on: ${{matrix.os}}
+  #  strategy:
+    #  matrix:
+    #    os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
     -  name: Checkout repo code
@@ -47,10 +48,10 @@ jobs:
 
   deploy-to-azure:
     name: 'Deploy Azure Web App'
-    needs: build_test_publish
+   # needs: build_test_publish
     runs-on: ubuntu-latest
     steps:
-     - name: Download build artifacts
+     - name: downloadtest
        uses: actions/download-artifact@v2
        with:
         name: mywebapp1
@@ -61,7 +62,7 @@ jobs:
        with:
          app-name: ${{ env.AZURE_WEBAPP_NAME }} 
          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings 
-         package: mywebapp1
+         package: ${{steps.downloadtest.outputs.download-path}}
       
   
   
