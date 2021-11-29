@@ -26,8 +26,9 @@ jobs:
     steps:
     -  run: |
         echo ${{ github.event_name }}
+        echo ${{ github.event.action }}
         echo ${{ github.event.pull_request.base.ref }}
-        
+        echo ${{ github.event.pull_request.merged }}
     -  name: Checkout repo code
        uses: actions/checkout@v2
       
