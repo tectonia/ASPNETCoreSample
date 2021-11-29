@@ -24,12 +24,12 @@ jobs:
     #    os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
-    -  run: |
-        echo ${{ github.ref }} 
-        echo ${{ github.event_name }}
-        echo ${{ github.event.action }}
-        echo ${{ github.event.pull_request.base.ref }}
-        echo ${{ github.event.pull_request.merged }}
+    - uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+         assignees: ${{github.actor}}
+      
     -  name: Checkout repo code
        uses: actions/checkout@v2
       
