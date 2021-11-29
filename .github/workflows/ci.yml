@@ -24,15 +24,15 @@ jobs:
     #    os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
+    -  name: Checkout repo code
+       uses: actions/checkout@v2
+      
     - uses: JasonEtco/create-an-issue@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
          assignees: ${{github.actor}}
-      
-    -  name: Checkout repo code
-       uses: actions/checkout@v2
-      
+         
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
