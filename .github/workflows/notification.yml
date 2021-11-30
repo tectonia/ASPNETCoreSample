@@ -1,6 +1,9 @@
 name: MS Teams Notifications
 on: 
- issues: [opened, deleted, closed]
+  push:
+    branches:
+      - main
+# issues: [opened, deleted, closed]
 
  
 jobs: 
