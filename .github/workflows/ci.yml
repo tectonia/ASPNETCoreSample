@@ -59,7 +59,7 @@ jobs:
         path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
 
   deploy-to-azure:
-    if: github.event_name == 'push'
+    if: github.ref == 'refs/heads/main'
     name: 'Deploy Azure Web App'
     needs: build_test_publish
     runs-on: ubuntu-latest
