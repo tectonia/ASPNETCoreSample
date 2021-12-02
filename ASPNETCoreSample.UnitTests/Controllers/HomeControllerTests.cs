@@ -9,7 +9,7 @@ namespace ASPNETCoreSample.UnitTests
         [TestMethod]
         public void HomeController_Test1()
         {
-            bool result = true;
+            bool result = false;
 
             Assert.IsTrue(result);
         }
