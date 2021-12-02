@@ -49,7 +49,10 @@ jobs:
       with:
         name: myappartifact
         path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
-  
+    outputs:
+       stagingURL: 'https://aspdotnetcorewelcome-staging'
+       prodURL:  'https://aspdotnetcorewelcome'
+     
   deploy-to-azure-staging:
     if: github.ref == 'refs/heads/main'
     name: 'Deploy Azure Web App - Staging'
@@ -57,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Staging
-      url: 'https://aspdotnetcorewelcome-staging.azurewebsites.net/'
+      url: '${{ needs.build_test_publish.outputs.stagingURL }}.azurewebsites.net/'
     steps:
      - name: Download Build Artifact
        uses: actions/download-artifact@v2
@@ -71,16 +74,16 @@ jobs:
        with:
          app-name: ${{ env.AZURE_WEBAPP_NAME }} 
          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings 
-         package: ${{steps.appartifact.outputs.download-path}}
+         package: ${{ steps.appartifact.outputs.download-path }}
          
   deploy-to-azure-prod:
     if: github.ref == 'refs/heads/main'
     name: 'Deploy Azure Web App - Prod'
-    needs: deploy-to-azure-staging
+    needs: [build_test_publish, deploy-to-azure-staging]
     runs-on: ubuntu-latest
     environment:
      name: Production
-     url: 'https://aspdotnetcorewelcome.azurewebsites.net/'
+     url: '${{ needs.build_test_publish.outputs.prodURL }}.azurewebsites.net/'
     steps:
      - name: Download Build Artifact
        uses: actions/download-artifact@v2
