@@ -18,7 +18,7 @@ env:
 
 jobs:
   build_test_publish:
-    name: 'Build, Test and Publish'
+    name: 'Build, Test, Publish'
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
@@ -51,12 +51,16 @@ jobs:
     - name: Publish
       run:   dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
     
+    - name: Test fail
+      run: |
+        exit 1
+        
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: myappartifact
         path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
-
+    
   notify-if-failure:
     if: (needs.build_test_publish.result == 'failure')
     name: 'Notify on failure'
