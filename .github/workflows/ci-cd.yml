@@ -66,7 +66,9 @@ jobs:
     name: 'Deploy Azure Web App'
     needs: build_test_publish
     runs-on: ubuntu-latest
-    environment: Production
+    environment:
+     name: Production
+     url: 'https://aspdotnetcorewelcome.azurewebsites.net/'
     steps:
      - name: Download Build Artifact
        uses: actions/download-artifact@v2
