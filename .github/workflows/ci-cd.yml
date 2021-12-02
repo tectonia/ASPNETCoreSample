@@ -83,6 +83,9 @@ jobs:
     needs: build_test_publish
     runs-on: ubuntu-latest
     steps:
+    -  name: Checkout repo code
+       uses: actions/checkout@v2
+       
     - name: Create an Issue if build fails
       uses: JasonEtco/create-an-issue@v2
       env:
