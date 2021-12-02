@@ -27,6 +27,8 @@ jobs:
     -  name: Checkout repo code
        uses: actions/checkout@v2
          
+    - run: exit 1
+     
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -43,7 +45,8 @@ jobs:
 
     - name: Publish
       run:   dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
-        
+    
+   
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
@@ -100,7 +103,8 @@ jobs:
          package: ${{steps.appartifact.outputs.download-path}}
       
   notify-if-failure:
-    if: always() && (needs.build_test_publish.result == 'failure')
+    if: failure()
+   # if: always() && (needs.build_test_publish.result == 'failure')
     name: 'Create Issue on failure'
     needs: build_test_publish
     runs-on: ubuntu-latest
