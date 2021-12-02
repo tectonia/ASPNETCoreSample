@@ -61,14 +61,6 @@ jobs:
         name: myappartifact
         path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
     
-  notify-if-failure:
-    if: (needs.build_test_publish.result == 'failure')
-    name: 'Notify on failure'
-    needs: build_test_publish
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Build failed"
-  
   deploy-to-azure:
     if: github.ref == 'refs/heads/main'
     name: 'Deploy Azure Web App'
@@ -90,5 +82,12 @@ jobs:
          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings 
          package: ${{steps.appartifact.outputs.download-path}}
       
+  notify-if-failure:
+    if: always() && (needs.build_test_publish.result == 'failure')
+    name: 'Notify on failure'
+    needs: build_test_publish
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Build failed"
   
   
