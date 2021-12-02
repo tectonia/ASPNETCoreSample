@@ -41,13 +41,6 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
-    - name: Create an Issue if build fails
-      if: ${{ failure() }}
-      uses: JasonEtco/create-an-issue@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        CommitID: ${{ github.sha }}
-      
     - name: Publish
       run:   dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
     
@@ -86,10 +79,14 @@ jobs:
       
   notify-if-failure:
     if: always() && (needs.build_test_publish.result == 'failure')
-    name: 'Notify on failure'
+    name: 'Create Issue on failure'
     needs: build_test_publish
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Build failed"
+    - name: Create an Issue if build fails
+      uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CommitID: ${{ github.sha }}
   
   
