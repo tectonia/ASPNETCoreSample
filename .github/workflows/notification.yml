@@ -1,24 +1,24 @@
-name: MS Teams Notifications
-on: 
+#name: MS Teams Notifications
+#on: 
  # push:
   #  branches:
   #    - main
- issues: [opened, deleted, closed]
+# issues: [opened, deleted, closed]
 
  
-jobs: 
-   build:
-    runs-on: ubuntu-latest
+#jobs: 
+ #  build:
+ #   runs-on: ubuntu-latest
 
-    steps:
+ #   steps:
      
       # this is the new step using the ms-teams-notification action
-      - name: Notify dedicated teams channel
-        uses: jdcargile/ms-teams-notification@v1.3
-        with:
-          github-token: ${{ github.token }} # this will use the runner's token.
-          ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
-          notification-summary: Your custom notification message 
-          notification-color: 17a2b8
+  #    - name: Notify dedicated teams channel
+    #    uses: jdcargile/ms-teams-notification@v1.3
+    #    with:
+      #    github-token: ${{ github.token }} # this will use the runner's token.
+      #    ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+      #    notification-summary: Your custom notification message 
+      #    notification-color: 17a2b8
 
          
