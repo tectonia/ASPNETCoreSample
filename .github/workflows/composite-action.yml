@@ -27,6 +27,8 @@ jobs:
         id: comp-action
         with:
           who-to-greet: ${{ github.event.inputs.who }}
+          if: ${{ github.event.inputs != '' }}
+          
       
       # Use the output of the composite action to echo a random number
       - run: echo Random number = ${{ steps.comp-action.outputs.random-number }}
