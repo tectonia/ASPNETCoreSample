@@ -1,1 +1,31 @@
+# User-friendly name of the workflow
+name: Composite Action demo
 
+# Triggers
+on:
+  # Manual trigger
+  workflow_dispatch:
+    # Inputs configurable when triggering
+    inputs:
+      who:
+        required: false
+        description: Who shall we greet?
+        type: text
+        
+# Array of jobs
+jobs:
+  # Alias of the job
+  greetings:
+    # Type of runner to run the steps within this job
+    runs-on: ubuntu-latest
+    # Array of steps
+    steps:
+      # Use public composite action
+      - uses: iveylabs/hello-world-composite-action@v1
+        id: comp-action
+        with:
+          who-to-greet: ${{ inputs.who }}
+      
+      # Use the output of the composite action to echo a random number
+      - run: echo random-number ${{ steps.comp-action.outputs.random-number }}
+        shell: bash
