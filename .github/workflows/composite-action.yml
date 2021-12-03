@@ -16,6 +16,7 @@ on:
 jobs:
   # Alias of the job
   greetings:
+    name: Greetings
     # Type of runner to run the steps within this job
     runs-on: ubuntu-latest
     # Array of steps
