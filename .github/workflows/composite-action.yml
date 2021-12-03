@@ -22,10 +22,12 @@ jobs:
     steps:
       # Use public composite action
       - uses: iveylabs/hello-world-composite-action@v1
+        name: Composite action
         id: comp-action
         with:
-          who-to-greet: ${{ inputs.who }}
+          who-to-greet: ${{ github.event.inputs.who }}
       
       # Use the output of the composite action to echo a random number
-      - run: echo random-number ${{ steps.comp-action.outputs.random-number }}
+      - run: echo Random number = ${{ steps.comp-action.outputs.random-number }}
+        name: Echo random number
         shell: bash
