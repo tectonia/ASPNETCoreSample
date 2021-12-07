@@ -103,7 +103,6 @@ jobs:
       
   notify-if-failure:
     if: failure()
-   # if: always() && (needs.build_test_publish.result == 'failure')
     name: 'Create Issue on failure'
     needs: build_test_publish
     runs-on: ubuntu-latest
