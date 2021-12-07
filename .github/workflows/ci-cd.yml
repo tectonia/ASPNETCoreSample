@@ -20,7 +20,7 @@ env:
 jobs:
   build_test_publish:
     name: 'Build, Test, Publish'
-    runs-on: ${{matrix.os}}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
