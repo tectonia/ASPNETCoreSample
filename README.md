@@ -2,4 +2,4 @@
 
 # ASPNETCoreSample
 
-This is a sample .NET Core application.
+This is a sample ASP.NET Core application.
