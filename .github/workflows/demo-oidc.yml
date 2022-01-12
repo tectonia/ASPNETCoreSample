@@ -14,10 +14,11 @@ env:
 jobs: 
   build_test_publish:
     name: 'Build, Test, Publish'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
+   # runs-on: ${{ matrix.os }}
+   # strategy:
+   #   matrix:
+    #    os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
     -  name: Checkout repo code
        uses: actions/checkout@v2
