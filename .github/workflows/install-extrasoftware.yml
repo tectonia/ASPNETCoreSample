@@ -6,5 +6,4 @@ jobs:
  get-tools:
   runs-on: windows-latest
   steps:
-      - run: choco install gh
-      - run: gh version
+      - run: choco install microsoftazurestorageexplorer
