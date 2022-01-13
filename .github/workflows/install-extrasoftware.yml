@@ -1,9 +1,12 @@
-name: Demo workflow to install GH CLI 
+name: Demo install extra tool 
 on:
  workflow_dispatch:
 
 jobs:
  get-tools:
-  runs-on: windows-latest
+  runs-on: macos-latest
   steps:
-      - run: choco install microsoftazurestorageexplorer
+    - run: |
+       brew update
+       brew install gh
+   - run: gh version
