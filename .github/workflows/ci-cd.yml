@@ -25,7 +25,7 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
-    -  run: echo github.ref
+    -  run: echo ${{ github.ref }}
     -  name: Checkout repo code
        uses: actions/checkout@v2
          
