@@ -57,7 +57,7 @@ jobs:
        prodURL:  'https://aspdotnetcorewelcome'
      
   deploy-to-azure-staging:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref != 'refs/heads/main'
     name: 'Deploy Azure Web App - Staging'
     needs: build_test_publish
     runs-on: ubuntu-latest
@@ -75,8 +75,8 @@ jobs:
      - name: 'Deploy Azure Web App'
        uses: azure/webapps-deploy@v2
        with:
-         app-name: ${{ env.AZURE_WEBAPP_NAME }} 
-         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings 
+         app-name: '${{ env.AZURE_WEBAPP_NAME }}-staging'
+         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository env settings 
          package: ${{ steps.appartifact.outputs.download-path }}
          
   deploy-to-azure-prod:
@@ -99,7 +99,7 @@ jobs:
        uses: azure/webapps-deploy@v2
        with:
          app-name: ${{ env.AZURE_WEBAPP_NAME }} 
-         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings 
+         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository env settings 
          package: ${{steps.appartifact.outputs.download-path}}
       
   notify-if-failure:
