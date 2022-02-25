@@ -8,10 +8,7 @@ on:
     - '**.yml'
     - '**.md'
  pull_request:
-    branches: [ main ]
-    paths-ignore: 
-     - '**.yml'
-     - '**.md'
+    types: [opened, reopened]
 env:
   AZURE_WEBAPP_NAME: aspdotnetcorewelcome    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
