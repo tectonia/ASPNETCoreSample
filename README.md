@@ -6,4 +6,4 @@
 
 This is a sample ASP.NET Core application.
 
-Update
+
