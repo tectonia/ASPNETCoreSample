@@ -5,7 +5,7 @@ on:
  push:
     branches: 
      - 'main'
-     - '!releases'
+     - '!releases/**'
     paths-ignore: 
     - '**.yml'
     - '**.md'
