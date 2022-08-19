@@ -12,7 +12,7 @@ on:
     types: [opened, reopened]
 
 env:
-  AZURE_WEBAPP_NAME: aspdotnetcorewelcome    # set this to your application's name
+  AZURE_WEBAPP_NAME: github-cicd-demo    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.x'           # set this to the dot net version to use
 
@@ -42,8 +42,8 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     
-#     - name: Publish
-#       run: dotnet publish -C Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+    - name: Publish
+      run: dotnet publish -C Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
