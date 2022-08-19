@@ -1,0 +1,54 @@
+name: CI-CD
+
+on:
+ workflow_dispatch: # manual deployment
+ push:
+    branches: ['main', '!releases/**']
+    paths-ignore: 
+    - '**.yml'
+    - '**.md'
+ pull_request:
+    branches: ['main', '!releases/**']
+    types: [opened, reopened]
+
+env:
+  AZURE_WEBAPP_NAME: aspdotnetcorewelcome    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '6.0.x'           # set this to the dot net version to use
+
+jobs:
+  build:
+    name: 'Continuous integration'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+    - name: Checkout repo code
+      uses: actions/checkout@v3
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    
+    - name: Publish
+      run: dotnet publish -C Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        # Artifact name
+        name: myappartifact
+        # A file, directory or wildcard pattern that describes what to upload
+        path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
