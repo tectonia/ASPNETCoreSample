@@ -43,7 +43,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     
     - name: Publish
-      run: dotnet publish -C Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+      run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
