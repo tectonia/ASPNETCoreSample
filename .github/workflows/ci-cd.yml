@@ -52,3 +52,43 @@ jobs:
         name: myappartifact
         # A file, directory or wildcard pattern that describes what to upload
         path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+    outputs:
+       prodURL:  'https://github-cicd-demo'
+     
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    name: 'Deploy Azure Web App - Prod'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+     name: Production
+     url: '${{ needs.build_test_publish.outputs.prodURL }}.azurewebsites.net/'
+    steps:
+     - name: Download Build Artifact
+       uses: actions/download-artifact@v2
+       id: appartifact
+       with:
+        name: myappartifact
+        path: myappartifact
+   
+     - name: 'Deploy Azure Web App'
+       uses: azure/webapps-deploy@v2
+       with:
+         app-name: ${{ env.AZURE_WEBAPP_NAME }} 
+         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository env settings 
+         package: ${{steps.appartifact.outputs.download-path}}
+      
+  notify-if-failure:
+    if: failure()
+    name: 'Create Issue on failure'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    -  name: Checkout repo code
+       uses: actions/checkout@v2
+       
+    - name: Create an Issue if build fails
+      uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CommitID: ${{ github.sha }}
